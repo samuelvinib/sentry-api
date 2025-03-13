@@ -2,13 +2,14 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY mvnw .
-COPY .mvn ./.mvn
+COPY mvnw ./
+COPY .mvn .mvn
 COPY pom.xml .
+
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+
 COPY src ./src
 
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+EXPOSE 8080 5005
 
-EXPOSE 8080
-
-CMD ["java", "-jar", "/app/target/api-0.0.1-SNAPSHOT.jar"]
+CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
