@@ -23,6 +23,6 @@ public class Document {
     private Long size;
 
     @Column(nullable = false)
-    private LocalDateTime uploadDate;
+    private LocalDateTime uploadDate = LocalDateTime.now();
 
 }
