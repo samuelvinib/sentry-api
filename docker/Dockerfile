@@ -5,16 +5,10 @@ WORKDIR /app
 COPY mvnw .
 COPY .mvn ./.mvn
 COPY pom.xml .
-
-RUN ./mvnw dependency:go-offline
-
 COPY src ./src
-COPY watch.sh .
 
-RUN chmod +x watch.sh
-
-RUN apt-get update && apt-get install -y inotify-tools
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
-CMD ["./watch.sh"]
+CMD ["java", "-jar", "/app/target/api-0.0.1-SNAPSHOT.jar"]
